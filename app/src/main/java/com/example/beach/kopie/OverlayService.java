@@ -13,10 +13,19 @@ import static android.view.WindowManager.LayoutParams;
 import static android.view.WindowManager.LayoutParams.*;
 
 public class OverlayService extends Service {
+    private static boolean enabled = false;
     private WindowManager windowManager;
     private View overlayView;
 
     public OverlayService() {
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
+    }
+
+    public static void setEnabled(boolean enabled) {
+        OverlayService.enabled = enabled;
     }
 
     @Override
@@ -36,11 +45,20 @@ public class OverlayService extends Service {
 
     private void createOverlay() {
         LayoutParams params = new LayoutParams(
-                WRAP_CONTENT, WRAP_CONTENT, TYPE_SYSTEM_OVERLAY, 0, PixelFormat.TRANSLUCENT);
+                WRAP_CONTENT, WRAP_CONTENT, TYPE_SYSTEM_ALERT,
+                FLAG_WATCH_OUTSIDE_TOUCH | FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSPARENT);
         params.gravity = (Gravity.END | Gravity.TOP);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         overlayView = inflater.inflate(R.layout.overlay_layout, null);
+
+        overlayView.findViewById(R.id.kopieButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("###clicked");
+            }
+        });
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowManager.addView(overlayView, params);
