@@ -25,7 +25,8 @@ public class MainActivity extends ActionBarActivity {
 
         if(toggleButton.isChecked()) {
             setEnabled(true);
-            startService(new Intent(this, OverlayService.class));
+            Intent intent = new Intent(this, OverlayService.class);
+            startService(intent);
         } else {
             setEnabled(false);
             stopService(new Intent(this, OverlayService.class));
