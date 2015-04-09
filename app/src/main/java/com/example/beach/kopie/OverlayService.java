@@ -1,10 +1,12 @@
 package com.example.beach.kopie;
 
 import android.app.Service;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.content.ClipboardManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,13 +116,17 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     }
 
     private void destroyOverlay() {
-        destroyDialog();
+        if(dialogDisplayed)
+            destroyDialog();
         windowManager.removeView(overlayContainer);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(parent == overlayListContainer.findViewById(R.id.itemList)) {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("kopie",parent.getItemAtPosition(position).toString());
+            clipboard.setPrimaryClip(clip);
             destroyDialog();
         }
     }
