@@ -32,4 +32,9 @@ public class MainActivity extends ActionBarActivity {
             stopService(new Intent(this, OverlayService.class));
         }
     }
+
+    public void editKopieList(View view) {
+        Intent intent = new Intent(this, EditKopieListActivity.class);
+        startActivity(intent);
+    }
 }

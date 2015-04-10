@@ -1,12 +1,10 @@
 package com.example.beach.kopie;
 
 import android.app.Service;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
-import android.content.ClipboardManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +17,7 @@ import java.util.ArrayList;
 
 import static android.view.WindowManager.LayoutParams;
 import static android.view.WindowManager.LayoutParams.*;
+import static com.example.beach.kopie.FileService.*;
 
 public class OverlayService extends Service implements AdapterView.OnItemClickListener {
     private static boolean enabled = false;
@@ -27,6 +26,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     private LayoutParams params;
     private View overlayListContainer;
     private boolean dialogDisplayed = false;
+    private LayoutInflater inflater;
 
 
     public OverlayService() {
@@ -53,6 +53,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     }
 
     private void init() {
+        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         params = new LayoutParams(
                 WRAP_CONTENT, WRAP_CONTENT, TYPE_SYSTEM_ALERT,
                 FLAG_WATCH_OUTSIDE_TOUCH | FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCH_MODAL,
@@ -67,8 +68,6 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     }
 
     private void createOverlay() {
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         overlayContainer = inflater.inflate(R.layout.overlay_layout, null);
 
         overlayContainer.findViewById(R.id.kopieButton).setOnClickListener(new View.OnClickListener() {
@@ -108,11 +107,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     }
 
     private ArrayList<String> generateList() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
-        list.add("C");
-        return list;
+        return read(inflater.getContext());
     }
 
     private void destroyOverlay() {
@@ -124,9 +119,16 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(parent == overlayListContainer.findViewById(R.id.itemList)) {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("kopie",parent.getItemAtPosition(position).toString());
-            clipboard.setPrimaryClip(clip);
+            int sdk = android.os.Build.VERSION.SDK_INT;
+            if(sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                clipboard.setText("text to clip");
+            } else {
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                android.content.ClipData clip = android.content.ClipData.newPlainText("kopie",parent.getItemAtPosition(position).toString());
+                clipboard.setPrimaryClip(clip);
+            }
+
             destroyDialog();
         }
     }

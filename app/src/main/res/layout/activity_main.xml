@@ -9,26 +9,20 @@
     android:weightSum="1">>
 
     <ToggleButton
-        android:layout_width="346dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toggleButton"
         android:checked="false"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:onClick="startOverlayService"
         android:textOff="@string/EnableKopie"
-        android:textOn="@string/DisableKopie"
-        android:layout_weight="0.02" />
+        android:textOn="@string/DisableKopie" />
 
     <Button
-        android:layout_width="346dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Kopie List"
-        android:id="@+id/editList"
-        android:layout_weight="0.02" />
+        android:text="@string/EditButton"
+        android:id="@+id/editListButton"
+        android:onClick="editKopieList" />
 
 </LinearLayout>
 
