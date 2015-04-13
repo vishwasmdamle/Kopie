@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1" >
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".7"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/itemText"
+            android:gravity="center_vertical"
+            android:padding="@dimen/textPadding" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".15"
+        android:gravity="center_vertical|center_horizontal"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants" >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editButton"
+            android:background="@android:drawable/ic_menu_edit"
+            android:onClick="editListItem" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".15"
+        android:gravity="center_vertical|center_horizontal"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants" >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteButton"
+            android:background="@android:drawable/ic_delete"
+            android:onClick="deleteListItem" />
+    </LinearLayout>
+
+</LinearLayout>

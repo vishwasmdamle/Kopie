@@ -3,8 +3,6 @@ package com.example.beach.kopie;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -16,8 +14,10 @@ import static android.view.View.*;
 import static com.example.beach.kopie.FileService.*;
 
 
-public class EditKopieListActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class EditKopieListActivity extends ActionBarActivity {
 
+    public static final boolean ADD_BUTTON = true;
+    public static final boolean EDIT_BUTTON = false;
     private int indexToRemove;
     private ArrayList<String> words;
 
@@ -31,11 +31,8 @@ public class EditKopieListActivity extends ActionBarActivity implements AdapterV
     }
 
     private void setupList() {
-
         ListView view = (ListView) findViewById(R.id.editList);
-        ArrayAdapter<String> editTextAdaptor = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, words);
-        view.setAdapter(editTextAdaptor);
-        view.setOnItemClickListener(this);
+        view.setAdapter(new WordsListAdaptor(this, words));
     }
 
     public void addToList(View v) {
@@ -47,15 +44,15 @@ public class EditKopieListActivity extends ActionBarActivity implements AdapterV
 
     public void editInList(View v) {
         String editText = String.valueOf(((EditText) findViewById(R.id.inputText)).getText());
-        words.add(indexToRemove, editText);
+        words.set(indexToRemove, editText);
         persistWordsList();
-        setButtonVisibility(true);
         resetView();
     }
 
     private void resetView() {
         EditText editTextView = (EditText) findViewById(R.id.inputText);
         editTextView.setText("");
+        setButtonType(ADD_BUTTON);
         setupList();
     }
 
@@ -64,22 +61,15 @@ public class EditKopieListActivity extends ActionBarActivity implements AdapterV
         return words;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(parent == findViewById(R.id.editList)) {
-            loadToEdit(position);
-        }
-    }
-
     private void loadToEdit(int index) {
         EditText editText = (EditText) findViewById(R.id.inputText);
         indexToRemove = index;
         editText.setText(words.get(index), TextView.BufferType.EDITABLE);
         editText.requestFocus();
-        setButtonVisibility(false);
+        setButtonType(EDIT_BUTTON);
     }
 
-    private void setButtonVisibility(boolean isAddVisible) {
+    private void setButtonType(boolean isAddVisible) {
         Button addButton = (Button) findViewById(R.id.addButton);
         Button editButton = (Button) findViewById(R.id.editButton);
         if(isAddVisible) {
@@ -90,5 +80,15 @@ public class EditKopieListActivity extends ActionBarActivity implements AdapterV
             editButton.setVisibility(VISIBLE);
 
         }
+    }
+
+    public void deleteListItem(View view) {
+        words.remove((int) view.getTag());
+        persistWordsList();
+        resetView();
+    }
+
+    public void editListItem(View view) {
+        loadToEdit((Integer) view.getTag());
     }
 }
