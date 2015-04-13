@@ -18,6 +18,7 @@ public class EditKopieListActivity extends ActionBarActivity {
 
     public static final boolean ADD_BUTTON = true;
     public static final boolean EDIT_BUTTON = false;
+    private static final int WORDS_LIMIT = 7;
     private int indexToRemove;
     private ArrayList<String> words;
 
@@ -27,6 +28,7 @@ public class EditKopieListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_edit_kopie_list);
         indexToRemove = -1;
         words = read(this);
+        resetView();
         setupList();
     }
 
@@ -53,6 +55,12 @@ public class EditKopieListActivity extends ActionBarActivity {
         EditText editTextView = (EditText) findViewById(R.id.inputText);
         editTextView.setText("");
         setButtonType(ADD_BUTTON);
+        if(words.size() == WORDS_LIMIT) {
+            findViewById(R.id.addButton).setEnabled(false);
+        }
+        else {
+            findViewById(R.id.addButton).setEnabled(true);
+        }
         setupList();
     }
 

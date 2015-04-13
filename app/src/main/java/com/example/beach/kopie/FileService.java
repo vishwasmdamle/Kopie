@@ -16,6 +16,7 @@ public class FileService {
             while (fileInputStream.available() > 0) {
                 dataString.append((char) fileInputStream.read());
             }
+            fileInputStream.close();
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -31,6 +32,7 @@ public class FileService {
                 dataString.append(word).append("\n");
             }
             fileOutputStream.write(dataString.toString().getBytes());
+            fileOutputStream.close();
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
