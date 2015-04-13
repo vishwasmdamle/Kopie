@@ -73,7 +73,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
         overlayContainer.findViewById(R.id.kopieButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!dialogDisplayed) {
+                if (!dialogDisplayed) {
                     buildDialog();
                 } else {
                     destroyDialog();
@@ -111,21 +111,22 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     }
 
     private void destroyOverlay() {
-        if(dialogDisplayed)
+        if (dialogDisplayed)
             destroyDialog();
         windowManager.removeView(overlayContainer);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(parent == overlayListContainer.findViewById(R.id.itemList)) {
+        String textToCopy = parent.getItemAtPosition(position).toString();
+        if (parent == overlayListContainer.findViewById(R.id.itemList)) {
             int sdk = android.os.Build.VERSION.SDK_INT;
-            if(sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
                 android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboard.setText("text to clip");
+                clipboard.setText(textToCopy);
             } else {
                 android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip = android.content.ClipData.newPlainText("kopie",parent.getItemAtPosition(position).toString());
+                android.content.ClipData clip = android.content.ClipData.newPlainText("kopie", textToCopy);
                 clipboard.setPrimaryClip(clip);
             }
 
