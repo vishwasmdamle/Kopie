@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ToggleButton;
 
-import static com.example.beach.kopie.OverlayService.isEnabled;
-import static com.example.beach.kopie.OverlayService.setEnabled;
+import static com.example.beach.kopie.SharedPreferenceService.isKopieEnabled;
+import static com.example.beach.kopie.SharedPreferenceService.setKopieEnabled;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -17,18 +17,18 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-        toggleButton.setChecked(isEnabled());
+        toggleButton.setChecked(isKopieEnabled(this));
     }
 
     public void startOverlayService(View view) {
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
 
         if(toggleButton.isChecked()) {
-            setEnabled(true);
+            setKopieEnabled(this, true);
             Intent intent = new Intent(this, OverlayService.class);
             startService(intent);
         } else {
-            setEnabled(false);
+            setKopieEnabled(this, false);
             stopService(new Intent(this, OverlayService.class));
         }
     }

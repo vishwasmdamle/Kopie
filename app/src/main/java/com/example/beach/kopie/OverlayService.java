@@ -20,29 +20,21 @@ import static android.view.WindowManager.LayoutParams.*;
 import static com.example.beach.kopie.FileService.*;
 
 public class OverlayService extends Service implements AdapterView.OnItemClickListener {
-    private static boolean enabled = false;
     private WindowManager windowManager;
     private View overlayContainer;
     private LayoutParams params;
     private View overlayListContainer;
     private boolean dialogDisplayed = false;
-    private LayoutInflater inflater;
+    private static LayoutInflater inflater;
 
 
     public OverlayService() {
     }
 
-
-    public static boolean isEnabled() {
-        return enabled;
-    }
-
-    public static void setEnabled(boolean enabled) {
-        OverlayService.enabled = enabled;
-    }
-
     @Override
     public void onCreate() {
+        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        System.out.println("service started");
         init();
         createOverlay();
     }
@@ -53,7 +45,6 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     }
 
     private void init() {
-        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         params = new LayoutParams(
                 WRAP_CONTENT, WRAP_CONTENT, TYPE_SYSTEM_ALERT,
                 FLAG_WATCH_OUTSIDE_TOUCH | FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCH_MODAL,
@@ -86,7 +77,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
 
     private void buildDialog() {
         dialogDisplayed = true;
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         overlayListContainer = inflater.inflate(R.layout.overlay_list_layout, null);
 
         ListView listView = (ListView) overlayListContainer.findViewById(R.id.itemList);
