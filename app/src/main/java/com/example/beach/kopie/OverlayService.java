@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -121,6 +122,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
                 clipboard.setPrimaryClip(clip);
             }
 
+            Toast.makeText(inflater.getContext(), getString(R.string.OnCopyMessage), Toast.LENGTH_SHORT).show();
             destroyDialog();
         }
     }
