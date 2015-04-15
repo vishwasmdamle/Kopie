@@ -112,15 +112,9 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String textToCopy = parent.getItemAtPosition(position).toString();
         if (parent == overlayListContainer.findViewById(R.id.itemList)) {
-            int sdk = android.os.Build.VERSION.SDK_INT;
-            if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboard.setText(textToCopy);
-            } else {
-                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip = android.content.ClipData.newPlainText("kopie", textToCopy);
-                clipboard.setPrimaryClip(clip);
-            }
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("kopie", textToCopy);
+            clipboard.setPrimaryClip(clip);
 
             Toast.makeText(inflater.getContext(), getString(R.string.OnCopyMessage), Toast.LENGTH_SHORT).show();
             destroyDialog();
