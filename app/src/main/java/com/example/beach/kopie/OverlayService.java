@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -82,14 +83,22 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
         overlayListContainer = inflater.inflate(R.layout.overlay_list_layout, null);
 
         ListView listView = (ListView) overlayListContainer.findViewById(R.id.itemList);
+        TextView textView = (TextView) overlayListContainer.findViewById(R.id.emptyElement);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                destroyDialog();
+            }
+        });
         createAdaptor(inflater.getContext(), generateList(), listView);
         listView.setOnItemClickListener(this);
+        listView.setEmptyView(overlayListContainer.findViewById(R.id.emptyElement));
 
         addViewToWindow(overlayListContainer, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
     }
 
     private void createAdaptor(Context context, ArrayList<String> list, ListView listView) {
-        ArrayAdapter<String> arrayAdaptor = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, list);
+        ArrayAdapter<String> arrayAdaptor = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(arrayAdaptor);
     }
 

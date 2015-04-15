@@ -9,4 +9,5 @@
     <string name="EditButton">Edit Kopie List</string>
     <string name="Update">Update</string>
     <string name="OnCopyMessage">Copied To Clipboard</string>
+    <string name="Empty">Nothing To Copy</string>
 </resources>
