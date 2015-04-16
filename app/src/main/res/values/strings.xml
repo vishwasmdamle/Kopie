@@ -3,8 +3,8 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="DisableKopie">Disable Kopie</string>
-    <string name="EnableKopie">Enable Kopie</string>
+    <string name="DisableKopie">DISABLE KOPIE</string>
+    <string name="EnableKopie">ENABLE KOPIE</string>
     <string name="Add">Add</string>
     <string name="EditButton">Edit Kopie List</string>
     <string name="Update">Update</string>
