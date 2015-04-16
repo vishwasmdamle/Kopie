@@ -2,6 +2,7 @@ package com.example.beach.kopie;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 
 import static com.example.beach.kopie.Constants.KOPIE;
 import static com.example.beach.kopie.Constants.KOPIE_ENABLED;
@@ -21,5 +22,19 @@ public class SharedPreferenceService {
                 .edit()
                 .putBoolean(KOPIE_ENABLED, enabled)
                 .commit();
+    }
+
+    public static void saveKopieLocation(Context context, Point point) {
+        getSharedPreference(context)
+                .edit()
+                .putInt("stateX", point.x)
+                .putInt("stateY", point.y)
+                .commit();
+    }
+
+    public static Point getKopieLocation(Context context, Point point) {
+        int stateX = getSharedPreference(context).getInt("stateX", point.x);
+        int stateY = getSharedPreference(context).getInt("stateY", point.y);
+        return new Point(stateX, stateY);
     }
 }

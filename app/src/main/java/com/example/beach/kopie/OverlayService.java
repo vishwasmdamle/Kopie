@@ -23,8 +23,9 @@ import static android.view.View.*;
 import static android.view.WindowManager.LayoutParams;
 import static android.view.WindowManager.LayoutParams.*;
 import static com.example.beach.kopie.FileService.*;
+import static com.example.beach.kopie.SharedPreferenceService.*;
 
-public class OverlayService extends Service implements AdapterView.OnItemClickListener {
+public class OverlayService extends Service implements AdapterView.OnItemClickListener, OnLongClickListener {
     private WindowManager windowManager;
     private View overlayContainer;
     private LayoutParams kopieParams;
@@ -32,6 +33,9 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     private View overlayListContainer;
     private boolean dialogDisplayed = false;
     private static LayoutInflater inflater;
+    private Point screenSize;
+    private Point defaultLocation;
+    private Point storedLocation;
 
 
     public OverlayService() {
@@ -61,7 +65,20 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
                 PixelFormat.TRANSLUCENT);
         listParams.gravity = CENTER_HORIZONTAL | CENTER_VERTICAL;
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        setupDisplayVariables();
+
+        storedLocation = SharedPreferenceService.getKopieLocation(inflater.getContext(), defaultLocation);
+
         dialogDisplayed = false;
+    }
+
+    private void setupDisplayVariables() {
+        screenSize = new Point();
+        defaultLocation = new Point();
+        windowManager.getDefaultDisplay().getSize(screenSize);
+        defaultLocation.x = 0;
+        defaultLocation.y = 0;
     }
 
     @Override
@@ -71,6 +88,10 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
 
     private void createOverlay() {
         overlayContainer = inflater.inflate(R.layout.overlay_layout, null);
+        kopieParams.x = storedLocation.x;
+        kopieParams.y = storedLocation.y;
+        windowManager.addView(overlayContainer, kopieParams);
+        windowManager.updateViewLayout(overlayContainer, kopieParams);
 
         final View kopieButton = overlayContainer.findViewById(R.id.kopieButton);
         kopieButton.setOnClickListener(new OnClickListener() {
@@ -83,41 +104,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
                 }
             }
         });
-        kopieButton.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Point screenPoint = new Point();
-                windowManager.getDefaultDisplay().getSize(screenPoint);
-                overlayContainer.setMinimumWidth(screenPoint.x);
-                overlayContainer.setMinimumHeight(screenPoint.y);
-                kopieButton.setVisibility(GONE);
-                overlayContainer.setOnDragListener(new OnDragListener() {
-                    public int lastX;
-                    public int lastY;
-
-                    @Override
-                    public boolean onDrag(View view, DragEvent dragEvent) {
-                        int action = dragEvent.getAction();
-                        if(action == DragEvent.ACTION_DRAG_ENDED || action == DragEvent.ACTION_DROP) {
-                            kopieParams.x = lastX - kopieButton.getWidth() / 2;
-                            kopieParams.y = lastY - kopieButton.getHeight() / 2;
-                            overlayContainer.setMinimumHeight(0);
-                            overlayContainer.setMinimumWidth(0);
-                            windowManager.updateViewLayout(overlayContainer, kopieParams);
-                            kopieButton.setVisibility(VISIBLE);
-                        } else {
-                            lastX = (int) dragEvent.getX();
-                            lastY = (int) dragEvent.getY();
-                        }
-                        return true;
-                    }
-                });
-                kopieButton.startDrag(null, new DragShadowBuilder(kopieButton), null, 0);
-                return true;
-            }
-        });
-        windowManager.addView(overlayContainer, kopieParams);
-
+        kopieButton.setOnLongClickListener(this);
     }
 
     private void buildDialog() {
@@ -172,5 +159,47 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
     private void destroyDialog() {
         windowManager.removeView(overlayListContainer);
         dialogDisplayed = false;
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        final View kopieButton = overlayContainer.findViewById(R.id.kopieButton);
+        if (view == kopieButton) {
+            Point screenPoint = new Point();
+            windowManager.getDefaultDisplay().getSize(screenPoint);
+            overlayContainer.setMinimumWidth(screenPoint.x);
+            overlayContainer.setMinimumHeight(screenPoint.y);
+
+            kopieButton.setVisibility(GONE);
+
+            overlayContainer.setOnDragListener(new OnDragListener() {
+                public int lastX;
+                public int lastY;
+
+                @Override
+                public boolean onDrag(View view, DragEvent dragEvent) {
+                    int action = dragEvent.getAction();
+                    if (action == DragEvent.ACTION_DRAG_ENDED || action == DragEvent.ACTION_DROP) {
+                        kopieParams.x = lastX - kopieButton.getWidth() / 2;
+                        kopieParams.y = lastY - kopieButton.getHeight() / 2;
+
+                        overlayContainer.setMinimumHeight(0);
+                        overlayContainer.setMinimumWidth(0);
+
+                        windowManager.updateViewLayout(overlayContainer, kopieParams);
+                        kopieButton.setVisibility(VISIBLE);
+
+                        saveKopieLocation(inflater.getContext(), new Point(kopieParams.x, kopieParams.y));
+                    } else {
+                        lastX = (int) dragEvent.getX();
+                        lastY = (int) dragEvent.getY();
+                    }
+                    return true;
+                }
+            });
+            kopieButton.startDrag(null, new DragShadowBuilder(kopieButton), null, 0);
+            return true;
+        }
+        return false;
     }
 }
