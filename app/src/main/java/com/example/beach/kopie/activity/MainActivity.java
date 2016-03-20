@@ -1,4 +1,4 @@
-package com.example.beach.kopie;
+package com.example.beach.kopie.activity;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ToggleButton;
 
-import static com.example.beach.kopie.SharedPreferenceService.isKopieEnabled;
-import static com.example.beach.kopie.SharedPreferenceService.setKopieEnabled;
+import com.example.beach.kopie.service.OverlayService;
+import com.example.beach.kopie.R;
+
+import static com.example.beach.kopie.service.SharedPreferenceService.isKopieEnabled;
+import static com.example.beach.kopie.service.SharedPreferenceService.setKopieEnabled;
 
 
 public class MainActivity extends ActionBarActivity {

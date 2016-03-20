@@ -1,11 +1,11 @@
-package com.example.beach.kopie;
+package com.example.beach.kopie.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 
-import static com.example.beach.kopie.Constants.KOPIE;
-import static com.example.beach.kopie.Constants.KOPIE_ENABLED;
+import static com.example.beach.kopie.util.Constants.KOPIE;
+import static com.example.beach.kopie.util.Constants.KOPIE_ENABLED;
 
 public class SharedPreferenceService {
 

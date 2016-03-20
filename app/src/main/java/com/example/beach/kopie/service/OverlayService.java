@@ -1,4 +1,4 @@
-package com.example.beach.kopie;
+package com.example.beach.kopie.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -16,14 +16,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.beach.kopie.R;
+
 import java.util.ArrayList;
 
 import static android.view.Gravity.*;
 import static android.view.View.*;
 import static android.view.WindowManager.LayoutParams;
 import static android.view.WindowManager.LayoutParams.*;
-import static com.example.beach.kopie.FileService.*;
-import static com.example.beach.kopie.SharedPreferenceService.*;
+import static com.example.beach.kopie.util.FileReader.*;
 
 public class OverlayService extends Service implements AdapterView.OnItemClickListener, OnLongClickListener {
     private WindowManager windowManager;
@@ -189,7 +190,7 @@ public class OverlayService extends Service implements AdapterView.OnItemClickLi
                         windowManager.updateViewLayout(overlayContainer, kopieParams);
                         kopieButton.setVisibility(VISIBLE);
 
-                        saveKopieLocation(inflater.getContext(), new Point(kopieParams.x, kopieParams.y));
+                        SharedPreferenceService.saveKopieLocation(inflater.getContext(), new Point(kopieParams.x, kopieParams.y));
                     } else {
                         lastX = (int) dragEvent.getX();
                         lastY = (int) dragEvent.getY();

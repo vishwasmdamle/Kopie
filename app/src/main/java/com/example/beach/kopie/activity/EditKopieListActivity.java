@@ -1,4 +1,4 @@
-package com.example.beach.kopie;
+package com.example.beach.kopie.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,10 +8,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.beach.kopie.R;
+import com.example.beach.kopie.adaptor.WordsListAdaptor;
+
 import java.util.ArrayList;
 
 import static android.view.View.*;
-import static com.example.beach.kopie.FileService.*;
+import static com.example.beach.kopie.util.FileReader.*;
 
 
 public class EditKopieListActivity extends ActionBarActivity {

@@ -1,13 +1,15 @@
-package com.example.beach.kopie;
+package com.example.beach.kopie.util;
 
 import android.content.Context;
+
+import com.example.beach.kopie.util.Constants;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FileService {
+public class FileReader {
 
     public static ArrayList<String> read(Context context) {
         StringBuilder dataString = new StringBuilder();
