@@ -27,5 +27,5 @@
         android:layout_below="@+id/itemList"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/holo_red_light"
-        android:background="@drawable/abc_list_selector_disabled_holo_light" />
+        android:background="@drawable/abc_list_selector_disabled_holo_light"
 </RelativeLayout>
